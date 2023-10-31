@@ -1,5 +1,5 @@
-import { UiContext, uiReducer } from './';
 import { useReducer } from 'react';
+import { UiContext, uiReducer } from './';
 
 export interface UiState {
   isMenuOpen: boolean;

@@ -1,7 +1,10 @@
-import { useEffect, useReducer } from 'react';
-import { ICartProduct, ShippingAddress } from '@/interfaces';
-import { CartContext, cartReducer } from './';
+import { useEffect, useReducer, useRef } from 'react';
 import Cookie from 'js-cookie';
+import axios from 'axios';
+
+import { ICartProduct, IOrder, ShippingAddress } from '@/interfaces';
+import { CartContext, cartReducer } from './';
+import { tesloApi } from '@/apis';
 
 export interface CartState {
   isLoaded: boolean;
@@ -26,6 +29,7 @@ const CART_INITIAL_STATE: CartState = {
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
+  const isReloading = useRef(true);
 
   useEffect(() => {
     try {
@@ -45,7 +49,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    Cookie.set('cart', JSON.stringify(state.cart));
+    if (isReloading.current) {
+      isReloading.current = false;
+    } else {
+      Cookie.set('cart', JSON.stringify(state.cart));
+    }
   }, [state.cart]);
 
   useEffect(() => {
@@ -142,6 +150,50 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: '[Cart] - UpdateShippingAddress', payload: address });
   };
 
+  const createOrder = async (): Promise<{
+    hasError: boolean;
+    message: string;
+  }> => {
+    if (!state.shippingAddress) {
+      throw new Error('No hay direccion de entrega');
+    }
+
+    const body: IOrder = {
+      orderItems: state.cart.map((p) => ({
+        ...p,
+        size: p.size!,
+      })),
+      shippingAddress: state.shippingAddress,
+      numberOfItems: state.numberOfItems,
+      subTotal: state.subTotal,
+      tax: state.tax,
+      total: state.total,
+      isPaid: false,
+    };
+
+    try {
+      const { data } = await tesloApi.post<IOrder>('/orders', body);
+      dispatch({ type: '[Cart] - OrderComplete' });
+
+      return {
+        hasError: false,
+        message: data._id!,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          hasError: true,
+          message: error.response?.data.message,
+        };
+      }
+
+      return {
+        hasError: true,
+        message: 'Error no controlado, reporte al administrador',
+      };
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -152,6 +204,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         removeCartProduct,
         updateCartQuantity,
         updateAddres,
+
+        //Rrders
+        createOrder,
       }}
     >
       {children}

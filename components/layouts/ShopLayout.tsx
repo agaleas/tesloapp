@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import Head from 'next/head';
 import { Navbar, SideMenu } from '../ui';
 
@@ -8,12 +9,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const ShopLayout = ({
+export const ShopLayout: FC<Props> = ({
   title,
   pageDescription,
   imageFullUrl,
   children,
-}: Props) => {
+}) => {
   return (
     <>
       <Head>

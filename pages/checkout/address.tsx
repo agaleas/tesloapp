@@ -2,15 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  MenuItem,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { CartContext } from '@/context';
 import { ShopLayout } from '@/components/layouts';
 import { countries } from '@/utils';
@@ -146,22 +138,22 @@ const AddressPage = () => {
 
           <Grid item xs={12} sm={6}>
             {/* <FormControl fullWidth> */}
-              <TextField
-                // select
-                variant='filled'
-                label='País'
-                fullWidth
-                // defaultValue={Cookies.get('country') ?? countries[0].code}
-                {...register('country', { required: 'país requerido' })}
-                error={!!errors.country}
-                helperText={errors.country?.message}
-              >
-                {/* {countries.map((country) => (
+            <TextField
+              // select
+              variant='filled'
+              label='País'
+              fullWidth
+              // defaultValue={Cookies.get('country') ?? countries[0].code}
+              {...register('country', { required: 'país requerido' })}
+              error={!!errors.country}
+              helperText={errors.country?.message}
+            >
+              {/* {countries.map((country) => (
                   <MenuItem value={country.code} key={country.code}>
                     {country.name}
                   </MenuItem>
                 ))} */}
-              </TextField>
+            </TextField>
             {/* </FormControl> */}
           </Grid>
 

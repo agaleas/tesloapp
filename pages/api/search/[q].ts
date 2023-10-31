@@ -1,7 +1,7 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '@/database';
 import { IProduct } from '@/interfaces';
 import { Product } from '@/models';
-import type { NextApiRequest, NextApiResponse } from 'next';
 
 type Data = { message: string } | IProduct[];
 
@@ -14,9 +14,8 @@ export default function handler(
       return searchProducts(req, res);
 
     default:
-      res.status(400).json({ message: 'Endpoint no existe' });
+      return res.status(400).json({ message: 'Endpoint no existe' });
   }
-  res.status(200).json({ message: 'Example' });
 }
 const searchProducts = async (
   req: NextApiRequest,

@@ -1,5 +1,5 @@
-import { IOrder } from '@/interfaces';
 import mongoose, { Schema, model, Model } from 'mongoose';
+import { IOrder } from '@/interfaces';
 
 const orderSchema = new Schema(
   {
@@ -31,7 +31,8 @@ const orderSchema = new Schema(
     total: { type: Number, required: true },
     isPaid: { type: Boolean, required: true },
     paidAt: { type: String, required: true, default: false },
-    name: { type: String },
+
+    transactionId: { type: String },
   },
   {
     timestamps: true,

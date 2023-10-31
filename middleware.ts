@@ -4,21 +4,53 @@ import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req: NextRequest) {
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const cartCookie = req.cookies.get('cart')?.value;
-  console.log({ cartCookie });
+  const requestedPage = req.nextUrl.pathname;
+  if (
+    req.nextUrl.pathname.includes('/checkout/address') ||
+    req.nextUrl.pathname.includes('/checkout/summary')
+  ) {
+    if (!session) {
+      const url = req.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.search = `p=${requestedPage}`;
 
-  if (!session) {
-    const requestedPage = req.nextUrl.pathname;
-    const url = req.nextUrl.clone();
-    url.pathname = '/auth/login';
-    url.search = `p=${requestedPage}`;
+      return NextResponse.redirect(url);
+    }
+  }
 
-    return NextResponse.redirect(url);
+  if (req.nextUrl.pathname.startsWith('/admin')) {
+    if (!session) {
+      const requestedPage = req.nextUrl.pathname;
+      const url = req.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.search = `p=${requestedPage}`;
+
+      return NextResponse.redirect(url);
+    }
+
+    const validRoles = ['admin', 'super-user', 'SEO'];
+    if (!validRoles.includes(session.user.role)) {
+      const url = req.nextUrl.clone();
+      url.pathname = '/';
+      return NextResponse.redirect(url);
+    }
+  }
+
+  //Proteccion para el API dashboard
+  if (req.nextUrl.pathname.startsWith('/api/admin/')) {
+    if (!session) {
+      return NextResponse.json({ message: 'No autorizado' }, { status: 401 });
+    }
+
+    const validRoles = ['admin', 'SEO'];
+    if (!validRoles.includes(session.user.role)) {
+      return NextResponse.json({ message: 'No autorizado' }, { status: 401 });
+    }
   }
 
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: ['/checkout/address', '/checkout/summary'],
-};
+// export const config = {
+//   matcher: ['/checkout/address', '/checkout/summary'],
+// };

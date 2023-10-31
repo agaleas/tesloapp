@@ -1,5 +1,6 @@
-import { ISize } from '@/interfaces';
+import { FC } from 'react';
 import { Box, Button } from '@mui/material';
+import { ISize } from '@/interfaces';
 
 interface Props {
   selectedSize?: ISize;
@@ -8,11 +9,11 @@ interface Props {
   //Method
   onSelectedSize: (size: ISize) => void;
 }
-export const SizeSelector = ({
+export const SizeSelector: FC<Props> = ({
   selectedSize,
   sizes,
   onSelectedSize,
-}: Props) => {
+}) => {
   return (
     <Box>
       {sizes.map((size) => (

@@ -1,3 +1,5 @@
+import { useContext, FC } from 'react';
+import NextLink from 'next/link';
 import {
   Box,
   Button,
@@ -7,35 +9,29 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import NextLink from 'next/link';
 import { ItemCounter } from '../ui';
-import { useContext } from 'react';
 import { CartContext } from '@/context';
-import { ICartProduct } from '@/interfaces';
+import { ICartProduct, IOrderItem } from '@/interfaces';
 
 interface Props {
   editable?: boolean;
+  products?: IOrderItem[];
 }
 
-export const CartList = ({ editable = false }: Props) => {
-  const {
-    cart: productsInCart,
-    updateCartQuantity,
-    removeCartProduct,
-  } = useContext(CartContext);
+export const CartList: FC<Props> = ({ editable = false, products }) => {
+  const { cart, updateCartQuantity, removeCartProduct } =
+    useContext(CartContext);
 
   const onNewProductQuantity = (product: ICartProduct, newQuantity: number) => {
     product.quantity = newQuantity;
     updateCartQuantity(product);
   };
 
-  const onRemoveProduct = (product: ICartProduct) => {
-    removeCartProduct(product);
-  };
+  const productsToShow = products ? products : cart;
 
   return (
     <>
-      {productsInCart.map((product) => (
+      {productsToShow.map((product) => (
         <Grid
           container
           key={product.slug + product.size}
@@ -49,7 +45,8 @@ export const CartList = ({ editable = false }: Props) => {
                 <CardActionArea>
                   <CardMedia
                     component='img'
-                    image={`/products/${product.images}`}
+                    // image={`/products/${product.image}`}
+                    image={product.image}
                     sx={{ borderRadius: '5px' }}
                   />
                 </CardActionArea>
@@ -66,7 +63,9 @@ export const CartList = ({ editable = false }: Props) => {
                 <ItemCounter
                   currentValue={product.quantity}
                   maxValue={10}
-                  updatedValue={(value) => onNewProductQuantity(product, value)}
+                  updatedValue={(value) =>
+                    onNewProductQuantity(product as ICartProduct, value)
+                  }
                 />
               ) : (
                 <Typography variant='h5'>
@@ -88,7 +87,7 @@ export const CartList = ({ editable = false }: Props) => {
               <Button
                 color='secondary'
                 variant='text'
-                onClick={() => onRemoveProduct(product)}
+                onClick={() => removeCartProduct(product as ICartProduct)}
               >
                 Remover
               </Button>

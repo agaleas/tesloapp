@@ -1,10 +1,6 @@
 import { useContext, useState } from 'react';
-import { CartContext, UiContext } from '@/context';
-import {
-  ClearOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
-} from '@mui/icons-material';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import {
   AppBar,
   Badge,
@@ -17,8 +13,12 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
+import {
+  ClearOutlined,
+  SearchOutlined,
+  ShoppingCartOutlined,
+} from '@mui/icons-material';
+import { CartContext, UiContext } from '@/context';
 
 export const Navbar = () => {
   const { asPath, push: routerPush } = useRouter();

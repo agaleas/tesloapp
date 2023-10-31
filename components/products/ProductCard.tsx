@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { IProduct } from '@/interfaces';
+import { FC, useMemo, useState } from 'react';
+import NextLink from 'next/link';
 import {
   Box,
   Card,
@@ -10,15 +10,21 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import NextLink from 'next/link';
+import { IProduct } from '@/interfaces';
 
-export const ProductCard = ({ product }: { product: IProduct }) => {
+interface Props {
+  product: IProduct;
+}
+
+export const ProductCard: FC<Props> = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const productImage = useMemo(() => {
     return isHovered
-      ? `/products/${product.images[1]}`
-      : `/products/${product.images[0]}`;
+      // ? `/products/${product.images[1]}`
+      // : `/products/${product.images[0]}`;
+      ? product.images[1]
+      : product.images[0];
   }, [isHovered, product.images]);
   return (
     <Grid
@@ -50,7 +56,7 @@ export const ProductCard = ({ product }: { product: IProduct }) => {
                 />
               )}
               <CardMedia
-                className='fade-in'
+                className='fadeIn'
                 component='img'
                 image={productImage}
                 alt={product.title}

@@ -1,7 +1,7 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { SHOP_CONSTANTS, db } from '@/database';
 import { IProduct } from '@/interfaces';
 import { Product } from '@/models';
-import type { NextApiRequest, NextApiResponse } from 'next';
 
 type Data = { message: string } | IProduct[];
 
@@ -14,7 +14,7 @@ export default function handler(
       return getProducts(req, res);
 
     default:
-      res.status(400).json({ message: 'Bad Request' });
+      return res.status(400).json({ message: 'Bad Request' });
   }
 }
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
@@ -29,5 +29,15 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     .lean();
   await db.disconnect();
 
-  return res.status(200).json(products);
+  const updatedProducts = products.map((product) => {
+    product.images = product.images.map((image) => {
+      return image.includes('https')
+        ? image
+        : `${process.env.HOST_NAME}products/${image}`;
+    });
+
+    return product;
+  });
+
+  return res.status(200).json(updatedProducts);
 };

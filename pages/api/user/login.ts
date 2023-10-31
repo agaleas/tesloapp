@@ -53,10 +53,6 @@ const logingUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   return res.status(200).json({
     token,
-    user: {
-      name,
-      role,
-      email,
-    },
+    user: { name, role, email },
   });
 };

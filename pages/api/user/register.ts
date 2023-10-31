@@ -65,14 +65,13 @@ const registerUser = async (
   const newUser = new User({
     email: email.toLocaleLowerCase(),
     password: bcrypt.hashSync(password),
-    name: name,
+    name,
     role: 'client',
   });
 
   try {
     await newUser.save({ validateBeforeSave: true });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: 'Revisar logs del servidor' });
   }
 

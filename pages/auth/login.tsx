@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { signIn, getProviders, getSession } from 'next-auth/react';
+import { signIn, getProviders } from 'next-auth/react';
 import {
   Box,
   Button,
@@ -18,8 +18,6 @@ import { ErrorOutline } from '@mui/icons-material';
 import { AuthLayout } from '@/components/layouts';
 import { validations } from '@/utils';
 import { getServerSession } from 'next-auth';
-// import { tesloApi } from '@/apis';
-// import { AuthContext } from '@/context';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 type FormData = {
@@ -84,7 +82,7 @@ const LoginPage = () => {
                 icon={<ErrorOutline />}
                 className='fadeIn'
                 sx={{ display: showError ? 'flex' : 'none' }}
-                variant='filled'
+                variant='outlined'
               />
             </Grid>
             <Grid item xs={12}>
@@ -146,7 +144,7 @@ const LoginPage = () => {
               </NextLink>
             </Grid>
 
-            {/* <Grid
+            <Grid
               item
               xs={12}
               display='flex'
@@ -170,7 +168,7 @@ const LoginPage = () => {
                   </Button>
                 );
               })}
-            </Grid> */}
+            </Grid>
           </Grid>
         </Box>
       </form>

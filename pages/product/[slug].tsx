@@ -1,11 +1,6 @@
 import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import {
-  GetServerSideProps,
-  NextPage,
-  GetStaticPaths,
-  GetStaticProps,
-} from 'next';
+import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { CartContext } from '@/context';
 import { ShopLayout } from '@/components/layouts';
@@ -19,12 +14,12 @@ interface Props {
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
-
   const router = useRouter();
+  const { addProductToCart } = useContext(CartContext);
 
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
-    images: product.images[0],
+    image: product.images[0],
     price: product.price,
     size: undefined,
     slug: product.slug,
@@ -32,8 +27,6 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     gender: product.gender,
     quantity: 1,
   });
-
-  const { addProductToCart } = useContext(CartContext);
 
   const onSelectedSize = (size: ISize) => {
     setTempCartProduct((currentProduct) => ({
@@ -153,7 +146,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { slug } = params as { slug: string };
+  const { slug = '' } = params as { slug: string };
   const product = await dbProducts.getProductBySlug(slug);
   if (!product) {
     return {

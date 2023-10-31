@@ -1,6 +1,6 @@
+import bcrypt from 'bcryptjs';
 import { User } from '@/models';
 import { db } from './';
-import bcrypt from 'bcryptjs';
 
 export const checkUserEmailPassword = async (
   email: string,
@@ -15,13 +15,13 @@ export const checkUserEmailPassword = async (
   }
 
   if (!bcrypt.compareSync(password, user.password!)) {
-    console.log('Error en las credenciales');
     return null;
   }
 
   const { role, name, _id } = user;
 
   return {
+    _id,
     role,
     name,
     email: email.toLowerCase(),
@@ -35,8 +35,8 @@ export const oAuthToDbUser = async (oAuthEmail: string, oAuthName: string) => {
   const user = await User.findOne({ email: oAuthEmail });
   if (user) {
     await db.disconnect();
-    const { _id: id, email, name, role } = user;
-    return { id, name, role, email };
+    const { _id, email, name, role } = user;
+    return { _id, name, role, email };
   }
 
   const newUser = new User({
@@ -49,6 +49,6 @@ export const oAuthToDbUser = async (oAuthEmail: string, oAuthName: string) => {
   await newUser.save();
   await db.disconnect();
 
-  const { _id: id, email, name, role } = newUser;
-  return { id, name, role, email };
+  const { _id, email, name, role } = newUser;
+  return { _id, name, role, email };
 };

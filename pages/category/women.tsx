@@ -1,20 +1,18 @@
+import { NextPage } from 'next';
+import { Typography } from '@mui/material';
 import { ShopLayout } from '@/components/layouts';
 import { ProductList } from '@/components/products';
 import { FullScreenLoading } from '@/components/ui';
 import { useProducts } from '@/hooks';
-import { Typography } from '@mui/material';
-import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
-
-const WomenPage = () => {
-  const { products, isError, isLoading } = useProducts(
+const WomenPage: NextPage = () => {
+  const { products, isLoading } = useProducts(
     '/products?gender=women'
   );
   return (
     <ShopLayout
       title={'Teslo Shop - Mujeres'}
-      pageDescription={'Encuentra los mejores productos para mujer'}
+      pageDescription={'Encuentra los mejores productos para ellas'}
     >
       <Typography variant='h1' component='h1'>
         Tienda

@@ -1,14 +1,12 @@
+import { NextPage } from 'next';
+import { Typography } from '@mui/material';
 import { ShopLayout } from '@/components/layouts';
 import { ProductList } from '@/components/products';
 import { FullScreenLoading } from '@/components/ui';
 import { useProducts } from '@/hooks';
-import { Typography } from '@mui/material';
-import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
-
-const MenPage = () => {
-  const { products, isError, isLoading } = useProducts('/products/?gender=men');
+const MenPage: NextPage = () => {
+  const { products, isLoading } = useProducts('/products/?gender=men');
   return (
     <ShopLayout
       title={'Teslo Shop - Men'}

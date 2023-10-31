@@ -1,9 +1,10 @@
 import NextAuth from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import { dbUsers } from '@/database';
+import Credentials from 'next-auth/providers/credentials';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
@@ -11,7 +12,7 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? '',
     }),
     // ...add more providers here
-    CredentialsProvider({
+    Credentials({
       name: 'Custom login',
       credentials: {
         email: {
@@ -40,9 +41,6 @@ export const authOptions = {
     newUser: '/auth/register',
   },
 
-  //jwt
-  jtw: {},
-
   session: {
     maxAge: 2592000, //30d
     strategy: 'jwt',
@@ -52,9 +50,9 @@ export const authOptions = {
   //callbacks
   callbacks: {
     async jwt({ token, user, account }) {
-      // console.log({ token, account, user });
+      // console.log({ token1: token, account1: account, user1: user });
       if (account) {
-        token.accessToken = account.access_token;
+        token.accessToken = account.access_token || '';
         switch (account.type) {
           case 'oauth':
             token.user = await dbUsers.oAuthToDbUser(
@@ -70,6 +68,7 @@ export const authOptions = {
       return token;
     },
     async session({ session, user, token }) {
+      // console.log({ session2: session, user2: user, token2: token });
       session.accessToken = token.accessToken;
       session.user = token.user as any;
       return session;

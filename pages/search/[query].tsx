@@ -1,12 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
+import { Box, Typography } from '@mui/material';
 import { ShopLayout } from '@/components/layouts';
 import { ProductList } from '@/components/products';
-import { Box, Typography } from '@mui/material';
-import { Inter } from 'next/font/google';
 import { dbProducts } from '@/database';
 import { IProduct } from '@/interfaces';
-
-const inter = Inter({ subsets: ['latin'] });
 
 interface Props {
   products: IProduct[];
@@ -17,11 +14,11 @@ interface Props {
 const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
   return (
     <ShopLayout
-      title={'Teslo Shop - buesqueda'}
+      title={'Teslo Shop - busqueda'}
       pageDescription={'Encuentra los mejores productos'}
     >
       <Typography variant='h1' component='h1'>
-        Busqueda de Productos
+        Buscar productos
       </Typography>
       {foundProducts ? (
         <Typography variant='h2' sx={{ mb: 1 }} textTransform='capitalize'>
@@ -32,7 +29,11 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
           <Typography variant='h2' sx={{ mb: 1 }}>
             No hubo resultados para:
           </Typography>
-          <Typography sx={{ ml: 1 }} color='secondary' textTransform='capitalize'>
+          <Typography
+            sx={{ ml: 1 }}
+            color='secondary'
+            textTransform='capitalize'
+          >
             {query}
           </Typography>
         </Box>

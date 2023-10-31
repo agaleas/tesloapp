@@ -3,19 +3,17 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
-import { signIn, getSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import {
   Box,
   Button,
   Chip,
-  Divider,
   Grid,
   Link,
   TextField,
   Typography,
 } from '@mui/material';
 import { AuthLayout } from '@/components/layouts';
-import { tesloApi } from '@/apis';
 import { validations } from '@/utils';
 import { ErrorOutline } from '@mui/icons-material';
 import { AuthContext } from '@/context';
@@ -77,7 +75,7 @@ const RegisterPage = () => {
                 icon={<ErrorOutline />}
                 className='fadeIn'
                 sx={{ display: showError ? 'flex' : 'none' }}
-                variant='filled'
+                variant='outlined'
               />
             </Grid>
             <Grid item xs={12}>
@@ -98,6 +96,7 @@ const RegisterPage = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                type='email'
                 label='Correo'
                 variant='outlined'
                 fullWidth
@@ -107,11 +106,11 @@ const RegisterPage = () => {
                 })}
                 error={!!errors.email}
                 helperText={errors.email?.message}
-                type='email'
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                type='password'
                 label='Contraseña'
                 variant='outlined'
                 fullWidth
@@ -124,11 +123,11 @@ const RegisterPage = () => {
                 })}
                 error={!!errors.password}
                 helperText={errors.password?.message}
-                type='password'
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                type='password'
                 label='Confirmar contraseña'
                 variant='outlined'
                 fullWidth
@@ -141,7 +140,6 @@ const RegisterPage = () => {
                 })}
                 error={!!errors.password}
                 helperText={errors.password?.message}
-                type='password'
               />
             </Grid>
             <Grid item xs={12}>

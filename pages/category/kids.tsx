@@ -1,13 +1,11 @@
+import { NextPage } from 'next';
+import { Typography } from '@mui/material';
 import { ShopLayout } from '@/components/layouts';
 import { ProductList } from '@/components/products';
 import { FullScreenLoading } from '@/components/ui';
 import { useProducts } from '@/hooks';
-import { Typography } from '@mui/material';
-import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
-
-const KidsPage = () => {
+const KidsPage: NextPage = () => {
   const { products, isError, isLoading } = useProducts('/products/?gender=kid');
   return (
     <ShopLayout

@@ -1,11 +1,12 @@
 import { useEffect, useReducer } from 'react';
-import { useRouter } from 'next/router';
 import { useSession, signOut } from 'next-auth/react';
+
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
 import { AuthContext, authReducer } from './';
 import { tesloApi } from '@/apis';
 import { IUser } from '@/interfaces';
-import Cookies from 'js-cookie';
-import axios from 'axios';
 
 export interface AuthState {
   isLoggedIn: boolean;
@@ -18,9 +19,8 @@ const AUTH_INITIAL_STATE: AuthState = {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const { data, status } = useSession();
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const { data, status } = useSession();
 
   useEffect(() => {
     if (status === 'authenticated') {

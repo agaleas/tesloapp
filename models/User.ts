@@ -1,5 +1,5 @@
-import { IUser } from '@/interfaces';
 import mongoose, { Schema, model, Model } from 'mongoose';
+import { IUser } from '@/interfaces';
 
 const userSchema = new Schema(
   {
@@ -9,7 +9,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       enum: {
-        values: ['admin', 'client'],
+        values: ['admin', 'client', 'super-user', 'SEO'],
         message: '{VALUE} no es un rol válido',
         default: 'client',
         required: true,
